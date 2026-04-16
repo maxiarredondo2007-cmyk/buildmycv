@@ -1,0 +1,2271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BuildMyCV — Creá tu CV profesional con IA</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    /* =====================
+       RESET Y VARIABLES
+    ===================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:        #185FA5;
+      --accent-light:  #E6F1FB;
+      --accent-mid:    #85B7EB;
+      --accent-dark:   #0C447C;
+      --green-light:   #EAF3DE;
+      --green-mid:     #C0DD97;
+      --green-dark:    #27500A;
+      --amber:         #EF9F27;
+      --text-primary:  #111110;
+      --text-secondary:#5F5E5A;
+      --text-tertiary: #888780;
+      --bg-primary:    #FFFFFF;
+      --bg-secondary:  #F8F7F4;
+      --border:        rgba(0,0,0,0.09);
+      --border-hover:  rgba(0,0,0,0.18);
+      --radius-sm:  6px;
+      --radius-md:  8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --font-sans: 'DM Sans', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+      --ease: 0.18s ease;
+      --nav-height: 68px;
+      --section-gap: 96px;
+      --max-w: 1060px;
+    }
+
+    html { font-family: var(--font-sans); scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { font-family: var(--font-sans); cursor: pointer; }
+    img { display: block; max-width: 100%; }
+
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* =====================
+       SHARED COMPONENTS
+    ===================== */
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--accent-mid);
+    }
+    .section-tag svg { width: 12px; height: 12px; }
+
+    /* =====================
+       NAVBAR
+    ===================== */
+    .nav-outer {
+      position: sticky;
+      top: 16px;
+      z-index: 100;
+      padding: 0 28px;
+      max-width: calc(var(--max-w) + 56px);
+      margin: 16px auto 0;
+    }
+
+    nav {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .nav-logo-icon {
+      width: 32px; height: 32px;
+      border-radius: var(--radius-sm);
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity var(--ease);
+    }
+    .nav-logo:hover .nav-logo-icon { opacity: 0.88; }
+    .nav-logo-name {
+      font-size: 15px; font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .nav-logo-name span { color: var(--accent); }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 2px;
+    }
+    .nav-links a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      padding: 6px 14px;
+      border-radius: var(--radius-md);
+      transition: background var(--ease), color var(--ease);
+    }
+    .nav-links a:hover, .nav-links a.active {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    .nav-right { display: flex; align-items: center; gap: 8px; }
+
+    .btn-nav-outline {
+      font-size: 14px;
+      padding: 7px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-hover);
+      background: transparent;
+      color: var(--text-primary);
+      transition: background var(--ease);
+    }
+    .btn-nav-outline:hover { background: var(--bg-secondary); }
+
+    .btn-primary {
+      font-size: 14px; font-weight: 500;
+      padding: 8px 18px;
+      border-radius: var(--radius-md);
+      background: var(--accent);
+      color: var(--accent-light);
+      border: none;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: opacity var(--ease), transform var(--ease);
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary svg { width: 14px; height: 14px; }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column; gap: 5px;
+      padding: 6px; border: none; background: transparent;
+      border-radius: var(--radius-sm);
+    }
+    .nav-hamburger span {
+      display: block; width: 20px; height: 1.5px;
+      background: var(--text-secondary); border-radius: 2px;
+      transition: transform var(--ease), opacity var(--ease);
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .nav-mobile-menu {
+      display: none; flex-direction: column;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 8px; margin-top: 6px;
+      animation: slideDown 0.18s ease;
+    }
+    .nav-mobile-menu.open { display: flex; }
+    .nav-mobile-menu a {
+      font-size: 14px; color: var(--text-secondary);
+      padding: 11px 14px; border-radius: var(--radius-md);
+      transition: background var(--ease), color var(--ease);
+    }
+    .nav-mobile-menu a:hover { background: var(--bg-secondary); color: var(--text-primary); }
+    .nav-mobile-menu .btn-primary { margin: 6px 0 0; justify-content: center; }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* =====================
+       HERO
+    ===================== */
+    .hero-section {
+      padding: calc(var(--section-gap) * 0.9) 0 var(--section-gap);
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero-left { display: flex; flex-direction: column; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 12px; font-weight: 500;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--accent-mid);
+      margin-bottom: 22px;
+      width: fit-content;
+    }
+    .hero-badge-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%; background: var(--accent);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero-title {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 500;
+      line-height: 1.18;
+      letter-spacing: -0.025em;
+      margin-bottom: 18px;
+      color: var(--text-primary);
+    }
+    .hero-title span { color: var(--accent); }
+
+    .hero-sub {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 30px;
+      max-width: 440px;
+    }
+
+    .hero-cta-row {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .btn-hero {
+      font-size: 15px; font-weight: 500;
+      padding: 11px 24px;
+      border-radius: var(--radius-md);
+      background: var(--accent);
+      color: var(--accent-light);
+      border: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: opacity var(--ease), transform var(--ease);
+    }
+    .btn-hero:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-hero svg { width: 15px; height: 15px; }
+
+    .btn-ghost {
+      font-size: 14px;
+      color: var(--text-secondary);
+      background: transparent; border: none;
+      display: inline-flex; align-items: center; gap: 7px;
+      transition: color var(--ease);
+    }
+    .btn-ghost:hover { color: var(--text-primary); }
+
+    .play-circle {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-hover);
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color var(--ease);
+    }
+    .btn-ghost:hover .play-circle { border-color: var(--accent); }
+    .play-triangle {
+      width: 0; height: 0;
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      border-left: 7px solid var(--text-secondary);
+      margin-left: 1px;
+      transition: border-left-color var(--ease);
+    }
+    .btn-ghost:hover .play-triangle { border-left-color: var(--accent); }
+
+    .hero-trust {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .stars { display: flex; gap: 3px; }
+    .star {
+      width: 13px; height: 13px;
+      background: var(--amber);
+      clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+    }
+    .trust-text { font-size: 13px; color: var(--text-tertiary); }
+
+    /* Hero mockup */
+    .hero-right {
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      min-height: 360px;
+    }
+
+    .cv-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      width: 220px;
+      padding: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    .cv-header-block {
+      display: flex; align-items: center; gap: 10px;
+      padding-bottom: 12px; margin-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .cv-avatar-circle {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 500; color: var(--accent-dark);
+      flex-shrink: 0;
+    }
+    .cv-name-block { flex: 1; }
+    .cv-bar { height: 6px; border-radius: 2px; background: #E5E4E0; margin-bottom: 5px; }
+    .cv-bar:last-child { margin-bottom: 0; }
+    .cv-bar.dark { background: #C8C7C3; }
+    .cv-bar.accent-bar { background: var(--accent-mid); }
+    .cv-bar.w40 { width: 40%; }
+    .cv-bar.w55 { width: 55%; }
+    .cv-bar.w65 { width: 65%; }
+    .cv-bar.w75 { width: 75%; }
+    .cv-bar.w85 { width: 85%; }
+    .cv-bar.w100 { width: 100%; }
+    .cv-section-block { margin-bottom: 12px; }
+    .cv-section-label {
+      font-size: 9px; font-weight: 500;
+      color: var(--accent); letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+    .cv-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+    .cv-tag {
+      height: 14px; width: 38px;
+      border-radius: 999px; background: var(--accent-light);
+    }
+    .cv-tag.wide { width: 54px; }
+    .ai-chip {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--accent-light);
+      border-radius: var(--radius-md);
+      padding: 6px 9px;
+      margin-top: 10px;
+    }
+    .ai-spark {
+      width: 14px; height: 14px;
+      background: var(--accent);
+      border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ai-lines { flex: 1; }
+    .ai-line { height: 5px; border-radius: 2px; background: var(--accent-mid); margin-bottom: 3px; }
+    .ai-line:last-child { width: 55%; margin-bottom: 0; }
+
+    /* =====================
+       CÓMO FUNCIONA
+    ===================== */
+    .how-section {
+      padding: var(--section-gap) 0;
+      background: var(--bg-primary);
+    }
+
+    .how-header { margin-bottom: 48px; }
+    .how-header .section-tag { margin-bottom: 14px; }
+    .how-header h2 {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 500; letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .how-header p { font-size: 15px; color: var(--text-secondary); line-height: 1.65; max-width: 480px; }
+
+    .steps-list { display: flex; flex-direction: column; max-width: 640px; }
+
+    .step-row { display: flex; gap: 22px; align-items: flex-start; }
+
+    .step-left {
+      display: flex; flex-direction: column;
+      align-items: center; flex-shrink: 0; width: 48px;
+    }
+
+    .step-icon-wrap {
+      width: 48px; height: 48px;
+      border-radius: var(--radius-lg);
+      background: var(--accent-light);
+      border: 1px solid var(--accent-mid);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; position: relative; z-index: 1;
+      transition: background var(--ease), border-color var(--ease);
+    }
+    .step-icon-wrap:hover { background: var(--accent); border-color: var(--accent); }
+    .step-icon-wrap:hover svg { stroke: #fff; }
+    .step-icon-wrap svg { width: 22px; height: 22px; stroke: var(--accent); transition: stroke var(--ease); }
+
+    .step-line {
+      width: 1px; flex: 1; min-height: 28px;
+      background: var(--border);
+      margin: 5px 0;
+    }
+    .step-row:last-child .step-line { display: none; }
+
+    .step-body { padding-bottom: 36px; flex: 1; }
+    .step-row:last-child .step-body { padding-bottom: 0; }
+
+    .step-num {
+      font-size: 11px; font-weight: 500;
+      color: var(--accent); margin-bottom: 5px;
+      font-family: var(--font-mono);
+    }
+    .step-title {
+      font-size: 17px; font-weight: 500;
+      margin-bottom: 7px; letter-spacing: -0.01em;
+    }
+    .step-desc {
+      font-size: 14px; color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* =====================
+       PLANTILLAS
+    ===================== */
+    .templates-section { padding: var(--section-gap) 0; }
+
+    .templates-header { margin-bottom: 32px; }
+    .templates-header .section-tag { margin-bottom: 14px; }
+    .templates-header h2 {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 500; letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .templates-header p { font-size: 15px; color: var(--text-secondary); line-height: 1.65; max-width: 480px; }
+
+    .filter-bar {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 28px;
+    }
+    .filter-btn {
+      font-size: 13px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      transition: all var(--ease);
+    }
+    .filter-btn:hover { border-color: var(--border-hover); color: var(--text-primary); }
+    .filter-btn.active { background: var(--accent); color: var(--accent-light); border-color: var(--accent); }
+
+    .templates-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .tpl-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color var(--ease), transform var(--ease);
+    }
+    .tpl-card:hover { border-color: var(--accent-mid); transform: translateY(-2px); }
+    .tpl-card.featured { border: 2px solid var(--accent); }
+    .tpl-card.hidden { display: none; }
+
+    .tpl-preview {
+      height: 220px;
+      background: var(--bg-secondary);
+      padding: 20px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .pop-badge {
+      position: absolute; top: 12px; right: 12px;
+      font-size: 11px; font-weight: 500;
+      padding: 3px 9px; border-radius: 999px;
+      background: var(--accent-light);
+      color: var(--accent-dark);
+      border: 1px solid var(--accent-mid);
+    }
+
+    .cv-mock {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      width: 155px; padding: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .mb { height: 6px; border-radius: 2px; background: #E5E4E0; margin-bottom: 5px; }
+    .mb.dk { background: #C8C7C3; }
+    .mb.ac { background: var(--accent-mid); }
+    .mb.w50 { width:50%; } .mb.w65 { width:65%; }
+    .mb.w75 { width:75%; } .mb.w85 { width:85%; }
+    .mb.sl { font-size: 9px; font-weight: 500; color: var(--accent); background: none; height: auto; letter-spacing: .05em; margin-bottom: 4px; }
+
+    /* Moderno */
+    .m-top {
+      background: var(--accent);
+      margin: -14px -14px 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .m-av { width:26px; height:26px; border-radius:50%; background: var(--accent-mid); flex-shrink:0; }
+    .m-bar { height:6px; border-radius:2px; background:rgba(255,255,255,0.45); margin-bottom:4px; }
+    .m-bar.dk { background:rgba(255,255,255,0.28); margin-bottom:0; }
+
+    /* Ejecutivo */
+    .e-top {
+      border-bottom: 2.5px solid var(--text-primary);
+      padding-bottom: 7px; margin-bottom: 7px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    .e-cols { display:flex; gap:8px; }
+    .e-main { flex:2; } .e-aside { flex:1; }
+    .e-ac { height:5px; border-radius:2px; background: var(--accent); width:60%; margin-bottom:5px; }
+
+    .tpl-footer {
+      padding: 14px 18px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .tpl-name { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+    .tpl-desc { font-size: 12px; color: var(--text-tertiary); }
+
+    .btn-use {
+      font-size: 13px; font-weight: 500;
+      padding: 7px 14px; border-radius: var(--radius-md);
+      background: var(--accent); color: var(--accent-light);
+      border: none; white-space: nowrap;
+      transition: opacity var(--ease), transform var(--ease);
+      flex-shrink: 0;
+    }
+    .btn-use:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* =====================
+       PRECIOS
+    ===================== */
+    .pricing-section {
+      padding: var(--section-gap) 0;
+      background: var(--bg-primary);
+    }
+
+    .pricing-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .pricing-header .section-tag { margin-bottom: 14px; }
+    .pricing-header h2 {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 500; letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .pricing-header p { font-size: 15px; color: var(--text-secondary); }
+
+    .billing-toggle {
+      display: flex; align-items: center;
+      justify-content: center; gap: 12px;
+      margin-bottom: 40px;
+    }
+    .billing-lbl {
+      font-size: 14px; color: var(--text-tertiary);
+      cursor: pointer; user-select: none;
+      transition: color var(--ease);
+    }
+    .billing-lbl.active { color: var(--text-primary); font-weight: 500; }
+
+    .tgl-track {
+      width: 44px; height: 24px;
+      border-radius: 999px;
+      background: var(--border-hover);
+      border: 1px solid var(--border);
+      cursor: pointer; position: relative;
+      transition: background var(--ease), border-color var(--ease);
+    }
+    .tgl-track.on { background: var(--accent); border-color: var(--accent); }
+    .tgl-thumb {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #fff; position: absolute;
+      top: 2px; left: 3px;
+      transition: left var(--ease);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .tgl-track.on .tgl-thumb { left: 22px; }
+
+    .save-pill {
+      font-size: 11px; font-weight: 500;
+      background: var(--green-light);
+      color: var(--green-dark);
+      padding: 3px 10px; border-radius: 999px;
+      border: 1px solid var(--green-mid);
+      transition: opacity var(--ease);
+    }
+    .save-pill.hide { opacity: 0; pointer-events: none; }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px; align-items: start;
+    }
+
+    .plan-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 24px 22px;
+      display: flex; flex-direction: column;
+      transition: border-color var(--ease), transform var(--ease);
+    }
+    .plan-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+    .plan-card.featured { border: 2px solid var(--accent); transform: translateY(-4px); }
+    .plan-card.featured:hover { transform: translateY(-6px); }
+
+    .pop-label {
+      font-size: 11px; font-weight: 500;
+      padding: 3px 10px; border-radius: 999px;
+      background: var(--accent); color: var(--accent-light);
+      width: fit-content; margin-bottom: 14px;
+    }
+    .plan-name { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+    .plan-tagline { font-size: 13px; color: var(--text-tertiary); line-height: 1.55; margin-bottom: 20px; }
+
+    .price-row { display: flex; align-items: baseline; gap: 2px; margin-bottom: 4px; }
+    .price-cur { font-size: 16px; font-weight: 500; color: var(--text-secondary); }
+    .price-amt { font-size: 32px; font-weight: 500; letter-spacing: -0.025em; font-variant-numeric: tabular-nums; }
+    .price-per { font-size: 13px; color: var(--text-tertiary); margin-left: 2px; }
+    .price-note { font-size: 12px; color: var(--green-dark); min-height: 18px; margin-bottom: 20px; }
+
+    .plan-div { height: 1px; background: var(--border); margin-bottom: 18px; }
+
+    .feat-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; flex: 1; }
+    .feat-item { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; color: var(--text-secondary); line-height: 1.45; }
+    .feat-item.off { color: var(--text-tertiary); }
+    .feat-ico {
+      width: 16px; height: 16px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .feat-ico.on { background: var(--accent-light); }
+    .feat-ico.off { background: var(--bg-secondary); }
+
+    .plan-btn {
+      width: 100%; font-size: 14px; font-weight: 500;
+      padding: 10px 18px; border-radius: var(--radius-md);
+      transition: opacity var(--ease), transform var(--ease);
+    }
+    .plan-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .plan-btn.outline { background: transparent; border: 1px solid var(--border-hover); color: var(--text-primary); }
+    .plan-btn.filled  { background: var(--accent); color: var(--accent-light); border: none; }
+    .plan-btn.dark    { background: var(--text-primary); color: var(--bg-primary); border: none; }
+
+    .pricing-note {
+      text-align: center; margin-top: 24px;
+      font-size: 12px; color: var(--text-tertiary);
+      font-family: var(--font-mono);
+    }
+
+    /* =====================
+       FOOTER
+    ===================== */
+    footer {
+      background: var(--text-primary);
+      color: var(--bg-secondary);
+      padding: 40px 0 32px;
+    }
+
+    .footer-inner {
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    }
+
+    .footer-logo {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .footer-logo-icon {
+      width: 28px; height: 28px;
+      border-radius: var(--radius-sm);
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .footer-logo-name { font-size: 14px; font-weight: 500; }
+    .footer-logo-name span { color: var(--accent-mid); }
+
+    .footer-links {
+      display: flex; gap: 20px;
+    }
+    .footer-links a {
+      font-size: 13px; color: rgba(255,255,255,0.45);
+      transition: color var(--ease);
+    }
+    .footer-links a:hover { color: rgba(255,255,255,0.8); }
+
+    .footer-copy {
+      font-size: 12px; color: rgba(255,255,255,0.3);
+      font-family: var(--font-mono);
+    }
+
+    /* =====================
+       RESPONSIVE
+    ===================== */
+    @media (max-width: 768px) {
+      :root { --section-gap: 64px; }
+
+      .nav-links, .nav-right { display: none; }
+      .nav-hamburger { display: flex; }
+
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-right { min-height: 260px; }
+
+      .templates-grid { grid-template-columns: 1fr; }
+      .plans-grid { grid-template-columns: 1fr; }
+      .plan-card.featured { transform: none; }
+
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .footer-links { flex-wrap: wrap; gap: 14px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-cta-row { flex-direction: column; align-items: flex-start; }
+      .nav-outer { top: 10px; }
+    }
+
+    /* =====================
+       MODAL BASE
+    ===================== */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.45);
+      align-items: center; justify-content: center;
+      padding: 20px;
+      animation: fadeIn .18s ease;
+    }
+    .modal-overlay.open { display: flex; }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+    .modal {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      width: 100%; max-width: 420px;
+      padding: 32px 28px;
+      position: relative;
+      animation: slideUp .2s ease;
+    }
+    @keyframes slideUp {
+      from { opacity:0; transform: translateY(16px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 28px; height: 28px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: transparent;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-tertiary);
+      transition: background var(--ease), color var(--ease);
+    }
+    .modal-close:hover { background: var(--bg-secondary); color: var(--text-primary); }
+
+    .modal-logo {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 24px;
+    }
+    .modal-logo-icon {
+      width: 28px; height: 28px;
+      border-radius: var(--radius-sm);
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-logo-name { font-size: 14px; font-weight: 500; }
+    .modal-logo-name span { color: var(--accent); }
+
+    .modal-title { font-size: 20px; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 6px; }
+    .modal-sub { font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.55; }
+
+    .form-field { margin-bottom: 14px; }
+    .form-label {
+      display: block; font-size: 13px; font-weight: 500;
+      color: var(--text-primary); margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%; font-family: var(--font-sans);
+      font-size: 14px; color: var(--text-primary);
+      background: var(--bg-primary);
+      border: 1px solid var(--border-hover);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      transition: border-color var(--ease), box-shadow var(--ease);
+      outline: none;
+    }
+    .form-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(24,95,165,0.12);
+    }
+    .form-input::placeholder { color: var(--text-tertiary); }
+
+    .form-hint { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
+
+    .btn-form {
+      width: 100%; font-family: var(--font-sans);
+      font-size: 15px; font-weight: 500;
+      padding: 11px; border-radius: var(--radius-md);
+      background: var(--accent); color: var(--accent-light);
+      border: none; cursor: pointer; margin-top: 6px;
+      transition: opacity var(--ease), transform var(--ease);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-form:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-form:active { transform: translateY(0); }
+    .btn-form svg { width: 15px; height: 15px; }
+
+    .form-divider {
+      display: flex; align-items: center; gap: 10px;
+      margin: 18px 0; color: var(--text-tertiary); font-size: 12px;
+    }
+    .form-divider::before, .form-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    .btn-google {
+      width: 100%; font-family: var(--font-sans);
+      font-size: 14px; font-weight: 500;
+      padding: 10px; border-radius: var(--radius-md);
+      background: var(--bg-primary); color: var(--text-primary);
+      border: 1px solid var(--border-hover); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 9px;
+      transition: background var(--ease);
+    }
+    .btn-google:hover { background: var(--bg-secondary); }
+
+    .modal-switch {
+      text-align: center; font-size: 13px;
+      color: var(--text-secondary); margin-top: 18px;
+    }
+    .modal-switch a {
+      color: var(--accent); font-weight: 500; cursor: pointer;
+    }
+    .modal-switch a:hover { text-decoration: underline; }
+
+    .modal-error {
+      font-size: 13px; color: #A32D2D;
+      background: #FCEBEB; border: 1px solid #F09595;
+      border-radius: var(--radius-md);
+      padding: 9px 12px; margin-bottom: 14px;
+      display: none;
+    }
+    .modal-error.show { display: block; }
+
+    /* =====================
+       GENERADOR DE CV — WIZARD
+    ===================== */
+    .generator-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.45);
+      align-items: center; justify-content: center;
+      padding: 20px;
+      animation: fadeIn .18s ease;
+    }
+    .generator-overlay.open { display: flex; }
+
+    .generator-modal {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      width: 100%; max-width: 520px;
+      padding: 32px 28px;
+      position: relative;
+      animation: slideUp .2s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .gen-progress-bar {
+      height: 3px; background: var(--bg-secondary);
+      border-radius: 999px; margin-bottom: 28px; overflow: hidden;
+    }
+    .gen-progress-fill {
+      height: 100%; background: var(--accent);
+      border-radius: 999px;
+      transition: width .35s ease;
+    }
+
+    .gen-step { display: none; }
+    .gen-step.active { display: block; }
+
+    .gen-step-num {
+      font-size: 11px; font-weight: 500;
+      color: var(--accent); font-family: var(--font-mono);
+      margin-bottom: 6px;
+    }
+    .gen-step-title {
+      font-size: 20px; font-weight: 500;
+      letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .gen-step-sub {
+      font-size: 14px; color: var(--text-secondary);
+      line-height: 1.55; margin-bottom: 24px;
+    }
+
+    .gen-options {
+      display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px;
+    }
+    .gen-option {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--border-hover);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: border-color var(--ease), background var(--ease);
+      font-size: 14px; color: var(--text-primary);
+      background: var(--bg-primary);
+    }
+    .gen-option:hover { border-color: var(--accent-mid); background: var(--accent-light); }
+    .gen-option.selected { border-color: var(--accent); background: var(--accent-light); }
+    .gen-option-icon {
+      width: 32px; height: 32px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-secondary);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: background var(--ease);
+    }
+    .gen-option.selected .gen-option-icon { background: var(--accent); }
+    .gen-option.selected .gen-option-icon svg { stroke: #fff; }
+    .gen-option-icon svg { width: 16px; height: 16px; stroke: var(--text-secondary); transition: stroke var(--ease); }
+    .gen-option-text { flex: 1; }
+    .gen-option-label { font-weight: 500; font-size: 14px; }
+    .gen-option-desc { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
+
+    .gen-textarea {
+      width: 100%; font-family: var(--font-sans);
+      font-size: 14px; color: var(--text-primary);
+      background: var(--bg-primary);
+      border: 1px solid var(--border-hover);
+      border-radius: var(--radius-md);
+      padding: 12px 14px; resize: vertical;
+      min-height: 110px; outline: none;
+      transition: border-color var(--ease), box-shadow var(--ease);
+      line-height: 1.6;
+    }
+    .gen-textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(24,95,165,0.12);
+    }
+    .gen-textarea::placeholder { color: var(--text-tertiary); }
+
+    .gen-nav {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-top: 24px;
+    }
+    .btn-gen-back {
+      font-family: var(--font-sans); font-size: 14px;
+      color: var(--text-secondary); background: transparent;
+      border: 1px solid var(--border-hover);
+      border-radius: var(--radius-md);
+      padding: 9px 18px; cursor: pointer;
+      transition: background var(--ease), color var(--ease);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .btn-gen-back:hover { background: var(--bg-secondary); color: var(--text-primary); }
+
+    .btn-gen-next {
+      font-family: var(--font-sans); font-size: 14px; font-weight: 500;
+      background: var(--accent); color: var(--accent-light);
+      border: none; border-radius: var(--radius-md);
+      padding: 9px 22px; cursor: pointer;
+      display: flex; align-items: center; gap: 7px;
+      transition: opacity var(--ease), transform var(--ease);
+    }
+    .btn-gen-next:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-gen-next svg { width: 14px; height: 14px; }
+
+    .gen-summary {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      padding: 16px; margin-bottom: 20px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .gen-summary-row {
+      display: flex; justify-content: space-between;
+      font-size: 13px; align-items: flex-start; gap: 12px;
+    }
+    .gen-summary-key { color: var(--text-tertiary); flex-shrink: 0; }
+    .gen-summary-val { color: var(--text-primary); font-weight: 500; text-align: right; }
+
+    .gen-generating {
+      text-align: center; padding: 24px 0 8px;
+    }
+    .gen-spinner {
+      width: 36px; height: 36px;
+      border: 2.5px solid var(--accent-light);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .gen-generating p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+    /* Stripe notice */
+    .stripe-notice {
+      background: var(--accent-light);
+      border: 1px solid var(--accent-mid);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      font-size: 13px; color: var(--accent-dark);
+      display: flex; align-items: flex-start; gap: 9px;
+      margin-top: 14px;
+    }
+    .stripe-notice svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; stroke: var(--accent); }
+
+    @media (max-width: 480px) {
+      .modal, .generator-modal { padding: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================== MODAL LOGIN ===================== -->
+  <div class="modal-overlay" id="loginOverlay" onclick="closeOnOverlay(event,'loginOverlay')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('loginOverlay')" aria-label="Cerrar">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1l10 10M11 1L1 11"/></svg>
+      </button>
+      <div class="modal-logo">
+        <div class="modal-logo-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#E6F1FB" stroke-width="1.5"><rect x="1" y="2" width="14" height="12" rx="2.5"/><path d="M4 7h8M4 10h5"/></svg>
+        </div>
+        <span class="modal-logo-name">Build<span>My</span>CV</span>
+      </div>
+      <h2 class="modal-title">Bienvenido de nuevo</h2>
+      <p class="modal-sub">Ingresá con tu cuenta para continuar.</p>
+      <div class="modal-error" id="loginError">Email o contraseña incorrectos. Intentá de nuevo.</div>
+      <div class="form-field">
+        <label class="form-label" for="loginEmail">Email</label>
+        <input class="form-input" type="email" id="loginEmail" placeholder="tu@email.com" autocomplete="email" />
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="loginPass">Contraseña</label>
+        <input class="form-input" type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" />
+        <p class="form-hint"><a href="#" style="color:var(--accent)">¿Olvidaste tu contraseña?</a></p>
+      </div>
+      <button class="btn-form" onclick="submitLogin()">
+        Iniciar sesión
+        <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7.5h9M8 3l4.5 4.5L8 12"/></svg>
+      </button>
+      <p class="modal-switch">¿No tenés cuenta? <a onclick="switchModal('loginOverlay','registerOverlay')">Registrate gratis</a></p>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL REGISTRO ===================== -->
+  <div class="modal-overlay" id="registerOverlay" onclick="closeOnOverlay(event,'registerOverlay')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('registerOverlay')" aria-label="Cerrar">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1l10 10M11 1L1 11"/></svg>
+      </button>
+      <div class="modal-logo">
+        <div class="modal-logo-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#E6F1FB" stroke-width="1.5"><rect x="1" y="2" width="14" height="12" rx="2.5"/><path d="M4 7h8M4 10h5"/></svg>
+        </div>
+        <span class="modal-logo-name">Build<span>My</span>CV</span>
+      </div>
+      <h2 class="modal-title">Creá tu cuenta</h2>
+      <p class="modal-sub">Gratis para empezar. Sin tarjeta de crédito.</p>
+      <div class="modal-error" id="registerError">Por favor completá todos los campos.</div>
+      <div class="form-field">
+        <label class="form-label" for="regName">Nombre completo</label>
+        <input class="form-input" type="text" id="regName" placeholder="Juan García" autocomplete="name" />
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="regEmail">Email</label>
+        <input class="form-input" type="email" id="regEmail" placeholder="tu@email.com" autocomplete="email" />
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="regPass">Contraseña</label>
+        <input class="form-input" type="password" id="regPass" placeholder="Mínimo 8 caracteres" autocomplete="new-password" />
+        <p class="form-hint">Usá al menos 8 caracteres con letras y números.</p>
+      </div>
+      <button class="btn-form" onclick="submitRegister()">
+        Crear cuenta gratis
+        <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7.5h9M8 3l4.5 4.5L8 12"/></svg>
+      </button>
+      <p class="modal-switch" style="font-size:11px;color:var(--text-tertiary);margin-top:10px">Al registrarte aceptás los <a href="#" style="color:var(--accent)">Términos</a> y la <a href="#" style="color:var(--accent)">Política de privacidad</a>.</p>
+      <p class="modal-switch">¿Ya tenés cuenta? <a onclick="switchModal('registerOverlay','loginOverlay')">Iniciá sesión</a></p>
+    </div>
+  </div>
+
+  <!-- ===================== GENERADOR DE CV — WIZARD ===================== -->
+  <div class="generator-overlay" id="generatorOverlay" onclick="closeOnOverlay(event,'generatorOverlay')">
+    <div class="generator-modal">
+      <button class="modal-close" onclick="closeModal('generatorOverlay')" aria-label="Cerrar">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 1l10 10M11 1L1 11"/></svg>
+      </button>
+
+      <div class="gen-progress-bar">
+        <div class="gen-progress-fill" id="genProgress" style="width:16.6%"></div>
+      </div>
+
+      <!-- Paso 1: Nombre y título -->
+      <div class="gen-step active" id="genStep1">
+        <div class="gen-step-num">01 / 06</div>
+        <h3 class="gen-step-title">¿Cómo te llamás?</h3>
+        <p class="gen-step-sub">Tu nombre y el puesto al que te postulás.</p>
+        <div class="form-field">
+          <label class="form-label">Nombre completo</label>
+          <input class="form-input" type="text" id="cvName" placeholder="Juan García" />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Puesto deseado</label>
+          <input class="form-input" type="text" id="cvRole" placeholder="Diseñador UX / Desarrollador Frontend" />
+        </div>
+        <div class="gen-nav">
+          <span></span>
+          <button class="btn-gen-next" onclick="genNext(1)">
+            Continuar <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h8M7 3l4 4-4 4"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Paso 2: Industria / estilo -->
+      <div class="gen-step" id="genStep2">
+        <div class="gen-step-num">02 / 06</div>
+        <h3 class="gen-step-title">¿En qué industria trabajás?</h3>
+        <p class="gen-step-sub">El tono y vocabulario del CV se adaptan al rubro.</p>
+        <div class="gen-options">
+          <div class="gen-option" onclick="selectOption(this,'industry','tecnologia')" data-value="tecnologia">
+            <div class="gen-option-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="9" rx="2"/><path d="M5 14h6M8 12v2"/></svg></div>
+            <div class="gen-option-text"><div class="gen-option-label">Tecnología</div><div class="gen-option-desc">Software, IT, startups</div></div>
+          </div>
+          <div class="gen-option" onclick="selectOption(this,'industry','diseno')" data-value="diseno">
+            <div class="gen-option-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="5"/><path d="M8 3v2M8 11v2M3 8h2M11 8h2"/></svg></div>
+            <div class="gen-option-text"><div class="gen-option-label">Diseño y creatividad</div><div class="gen-option-desc">UX, gráfico, marketing</div></div>
+          </div>
+          <div class="gen-option" onclick="selectOption(this,'industry','finanzas')" data-value="finanzas">
+            <div class="gen-option-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12l4-4 3 3 5-6"/></svg></div>
+            <div class="gen-option-text"><div class="gen-option-label">Finanzas y negocios</div><div class="gen-option-desc">Contabilidad, economía, consultoría</div></div>
+          </div>
+          <div class="gen-option" onclick="selectOption(this,'industry','otro')" data-value="otro">
+            <div class="gen-option-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="1"/><circle cx="4" cy="8" r="1"/><circle cx="12" cy="8" r="1"/></svg></div>
+            <div class="gen-option-text"><div class="gen-option-label">Otra industria</div><div class="gen-option-desc">Salud, educación, etc.</div></div>
+          </div>
+        </div>
+        <div class="gen-nav">
+          <button class="btn-gen-back" onclick="genBack(2)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 7H3M7 3L3 7l4 4"/></svg> Atrás</button>
+          <button class="btn-gen-next" onclick="genNext(2)">Continuar <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h8M7 3l4 4-4 4"/></svg></button>
+        </div>
+      </div>
+
+      <!-- Paso 3: Experiencia -->
+      <div class="gen-step" id="genStep3">
+        <div class="gen-step-num">03 / 06</div>
+        <h3 class="gen-step-title">Contanos tu experiencia</h3>
+        <p class="gen-step-sub">Describí brevemente tus trabajos anteriores. La IA los va a redactar de forma profesional.</p>
+        <div class="form-field">
+          <label class="form-label">Experiencia laboral</label>
+          <textarea class="gen-textarea" id="cvExperience" placeholder="Ej: 2 años como desarrollador en empresa X, trabajé en proyectos de e-commerce con React y Node.js. Antes, 1 año en startup Y como frontend..."></textarea>
+          <p class="form-hint">No te preocupés por la redacción — escribí como puedas y la IA lo transforma.</p>
+        </div>
+        <div class="gen-nav">
+          <button class="btn-gen-back" onclick="genBack(3)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 7H3M7 3L3 7l4 4"/></svg> Atrás</button>
+          <button class="btn-gen-next" onclick="genNext(3)">Continuar <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h8M7 3l4 4-4 4"/></svg></button>
+        </div>
+      </div>
+
+      <!-- Paso 4: Educación y habilidades -->
+      <div class="gen-step" id="genStep4">
+        <div class="gen-step-num">04 / 06</div>
+        <h3 class="gen-step-title">Educación y habilidades</h3>
+        <p class="gen-step-sub">Tu formación y las herramientas que dominás.</p>
+        <div class="form-field">
+          <label class="form-label">Educación</label>
+          <input class="form-input" type="text" id="cvEducation" placeholder="Ej: Ingeniería en Sistemas — UBA (2019)" />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Habilidades principales</label>
+          <input class="form-input" type="text" id="cvSkills" placeholder="Ej: React, Node.js, Figma, inglés avanzado" />
+          <p class="form-hint">Separalas con comas.</p>
+        </div>
+        <div class="gen-nav">
+          <button class="btn-gen-back" onclick="genBack(4)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 7H3M7 3L3 7l4 4"/></svg> Atrás</button>
+          <button class="btn-gen-next" onclick="genNext(4)">Continuar <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h8M7 3l4 4-4 4"/></svg></button>
+        </div>
+      </div>
+
+      <!-- Paso 5: Plantilla -->
+      <div class="gen-step" id="genStep5">
+        <div class="gen-step-num">05 / 06</div>
+        <h3 class="gen-step-title">Elegí una plantilla</h3>
+        <p class="gen-step-sub">El estilo visual de tu CV.</p>
+        <div class="gen-options">
+          <div class="gen-option" onclick="selectOption(this,'template','moderno')" data-value="moderno">
+            <div class="gen-option-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M2 6h12"/><path d="M6 6v8"/></svg></div>
+            <div class="gen-option-text"><div class="gen-option-label">Moderno</div><div class="gen-option-desc">Tecnología y startups</div></div>
+          </div>
+          <div class="gen-option" onclick="selectOption(this,'template','clasico')" data-value="clasico">
+            <div class="gen-option-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="2" width="10" height="12" rx="1.5"/><path d="M5 6h6M5 9h6M5 12h4"/></svg></div>
+            <div class="gen-option-text"><div class="gen-option-label">Clásico</div><div class="gen-option-desc">Finanzas y derecho</div></div>
+          </div>
+          <div class="gen-option" onclick="selectOption(this,'template','creativo')" data-value="creativo">
+            <div class="gen-option-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="12" rx="1.5"/><rect x="9" y="2" width="5" height="6" rx="1.5"/><rect x="9" y="10" width="5" height="4" rx="1.5"/></svg></div>
+            <div class="gen-option-text"><div class="gen-option-label">Creativo</div><div class="gen-option-desc">Diseño y marketing</div></div>
+          </div>
+          <div class="gen-option" onclick="selectOption(this,'template','ejecutivo')" data-value="ejecutivo">
+            <div class="gen-option-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M2 5h12M5 5v9"/></svg></div>
+            <div class="gen-option-text"><div class="gen-option-label">Ejecutivo</div><div class="gen-option-desc">Gerencia y liderazgo</div></div>
+          </div>
+        </div>
+        <div class="gen-nav">
+          <button class="btn-gen-back" onclick="genBack(5)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 7H3M7 3L3 7l4 4"/></svg> Atrás</button>
+          <button class="btn-gen-next" onclick="genNext(5)">Ver resumen <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7h8M7 3l4 4-4 4"/></svg></button>
+        </div>
+      </div>
+
+      <!-- Paso 6: Resumen y generar -->
+      <div class="gen-step" id="genStep6">
+        <div class="gen-step-num">06 / 06</div>
+        <h3 class="gen-step-title">Todo listo para generar</h3>
+        <p class="gen-step-sub">Revisá tu información antes de que la IA cree tu CV.</p>
+        <div class="gen-summary" id="genSummary"></div>
+        <div class="stripe-notice">
+          <svg viewBox="0 0 16 16" fill="none" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5L10 10"/></svg>
+          <span>Para descargar el PDF necesitás un plan activo. Al hacer clic en <strong>Generar CV</strong> te llevamos al checkout para completar el pago con <strong>Stripe</strong> o <strong>MercadoPago</strong>.</span>
+        </div>
+        <div class="gen-nav">
+          <button class="btn-gen-back" onclick="genBack(6)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 7H3M7 3L3 7l4 4"/></svg> Atrás</button>
+          <button class="btn-gen-next" onclick="startGeneration()" style="background:#27500A;padding:10px 22px">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1L8.5 5.5L13 7L8.5 8.5L7 13L5.5 8.5L1 7L5.5 5.5Z"/></svg>
+            Generar CV
+          </button>
+        </div>
+      </div>
+
+      <!-- Paso generando -->
+      <div class="gen-step" id="genStepLoading">
+        <div class="gen-generating">
+          <div class="gen-spinner"></div>
+          <h3 class="gen-step-title" style="margin-bottom:8px">Generando tu CV…</h3>
+          <p>La IA está redactando tu CV profesional.<br>Esto tarda unos segundos.</p>
+          <p style="margin-top:12px;font-size:12px;color:var(--text-tertiary);font-family:var(--font-mono)" id="genLoadingMsg">Analizando tu experiencia…</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== NAVBAR ===================== -->
+  <div class="nav-outer">
+    <nav>
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#E6F1FB" stroke-width="1.5">
+            <rect x="1" y="2" width="14" height="12" rx="2.5"/>
+            <path d="M4 7h8M4 10h5"/>
+          </svg>
+        </div>
+        <span class="nav-logo-name">Build<span>My</span>CV</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#hero" class="active">Inicio</a></li>
+        <li><a href="#como-funciona">Cómo funciona</a></li>
+        <li><a href="#plantillas">Plantillas</a></li>
+        <li><a href="#precios">Precios</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <button class="btn-nav-outline" onclick="openModal('loginOverlay')">Iniciar sesión</button>
+        <button class="btn-primary" onclick="openModal('registerOverlay')">
+          Crear mi CV
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 7h8M7 3l4 4-4 4"/>
+          </svg>
+        </button>
+      </div>
+
+      <button class="nav-hamburger" id="hamburger" aria-label="Abrir menú" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <div class="nav-mobile-menu" id="mobileMenu">
+      <a href="#hero" onclick="toggleMenu()">Inicio</a>
+      <a href="#como-funciona" onclick="toggleMenu()">Cómo funciona</a>
+      <a href="#plantillas" onclick="toggleMenu()">Plantillas</a>
+      <a href="#precios" onclick="toggleMenu()">Precios</a>
+      <button class="btn-primary" style="justify-content:center;border:none;width:100%;margin-top:6px" onclick="toggleMenu();openModal('registerOverlay')">
+        Crear mi CV
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 7h8M7 3l4 4-4 4"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero-section" id="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-left">
+          <div class="hero-badge">
+            <div class="hero-badge-dot"></div>
+            Impulsado por IA
+          </div>
+          <h1 class="hero-title">
+            Creá tu CV <span>profesional</span><br>en minutos con IA
+          </h1>
+          <p class="hero-sub">
+            Respondé unas pocas preguntas y nuestra IA genera un CV listo para postularte. Sin plantillas vacías, sin horas perdidas.
+          </p>
+          <div class="hero-cta-row">
+            <button class="btn-hero" onclick="openModal('generatorOverlay')">
+              Probar gratis
+              <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M3 7.5h9M8 3l4.5 4.5L8 12"/>
+              </svg>
+            </button>
+            <button class="btn-ghost" onclick="document.getElementById('como-funciona').scrollIntoView({behavior:'smooth'})">
+              <div class="play-circle">
+                <div class="play-triangle"></div>
+              </div>
+              Ver cómo funciona
+            </button>
+          </div>
+          <div class="hero-trust">
+            <div class="stars">
+              <div class="star"></div><div class="star"></div>
+              <div class="star"></div><div class="star"></div>
+              <div class="star"></div>
+            </div>
+            <span class="trust-text">+2.000 CVs generados esta semana</span>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="cv-card">
+            <div class="cv-header-block">
+              <div class="cv-avatar-circle">JD</div>
+              <div class="cv-name-block">
+                <div class="cv-bar dark w75"></div>
+                <div class="cv-bar w55"></div>
+              </div>
+            </div>
+            <div class="cv-section-block">
+              <div class="cv-section-label">EXPERIENCIA</div>
+              <div class="cv-bar dark w100"></div>
+              <div class="cv-bar w85"></div>
+              <div class="cv-bar w65"></div>
+            </div>
+            <div class="cv-section-block">
+              <div class="cv-section-label">EDUCACIÓN</div>
+              <div class="cv-bar dark w75"></div>
+              <div class="cv-bar w55"></div>
+            </div>
+            <div class="cv-section-block">
+              <div class="cv-section-label">HABILIDADES</div>
+              <div class="cv-tags">
+                <div class="cv-tag"></div>
+                <div class="cv-tag wide"></div>
+                <div class="cv-tag"></div>
+                <div class="cv-tag wide"></div>
+              </div>
+            </div>
+            <div class="ai-chip">
+              <div class="ai-spark">
+                <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                  <path d="M4 1L5 3.5L8 4L5 4.5L4 7L3 4.5L0 4L3 3.5Z" fill="#E6F1FB"/>
+                </svg>
+              </div>
+              <div class="ai-lines">
+                <div class="ai-line"></div>
+                <div class="ai-line"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CÓMO FUNCIONA ===================== -->
+  <section class="how-section" id="como-funciona">
+    <div class="container">
+      <div class="how-header">
+        <div class="section-tag">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4">
+            <path d="M6 1L7.2 4.2L11 4.2L8.1 6.5L9.3 9.7L6 7.8L2.7 9.7L3.9 6.5L1 4.2L4.8 4.2Z"/>
+          </svg>
+          Simple y rápido
+        </div>
+        <h2>Cómo funciona</h2>
+        <p>En tres pasos simples tenés tu CV profesional listo para enviar.</p>
+      </div>
+
+      <div class="steps-list">
+
+        <div class="step-row">
+          <div class="step-left">
+            <div class="step-icon-wrap">
+              <svg viewBox="0 0 22 22" fill="none" stroke-width="1.5">
+                <circle cx="11" cy="8" r="4"/>
+                <path d="M3 19c0-4 3.6-7 8-7s8 3 8 7"/>
+              </svg>
+            </div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <div class="step-num">01</div>
+            <div class="step-title">Completás tu perfil</div>
+            <p class="step-desc">Contanos tu experiencia, educación y habilidades. Nada complicado — es como llenar un formulario simple. Tarda menos de 5 minutos.</p>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <div class="step-left">
+            <div class="step-icon-wrap">
+              <svg viewBox="0 0 22 22" fill="none" stroke-width="1.5">
+                <rect x="3" y="4" width="16" height="14" rx="2"/>
+                <path d="M7 9h4M7 13h8"/>
+              </svg>
+            </div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <div class="step-num">02</div>
+            <div class="step-title">La IA redacta tu CV</div>
+            <p class="step-desc">Nuestra inteligencia artificial transforma tu información en un CV profesional, con el lenguaje y formato que las empresas esperan ver.</p>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <div class="step-left">
+            <div class="step-icon-wrap">
+              <svg viewBox="0 0 22 22" fill="none" stroke-width="1.5">
+                <path d="M11 3v11M7 10l4 4 4-4"/>
+                <path d="M4 17h14"/>
+              </svg>
+            </div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <div class="step-num">03</div>
+            <div class="step-title">Descargás el PDF</div>
+            <p class="step-desc">Tu CV está listo. Descargalo en PDF con un clic, en el formato ideal para enviarlo por email o subirlo a portales de empleo.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLANTILLAS ===================== -->
+  <section class="templates-section" id="plantillas">
+    <div class="container">
+      <div class="templates-header">
+        <div class="section-tag">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4">
+            <rect x="1" y="1" width="4" height="5" rx="1"/>
+            <rect x="7" y="1" width="4" height="3" rx="1"/>
+            <rect x="7" y="6" width="4" height="5" rx="1"/>
+            <rect x="1" y="8" width="4" height="3" rx="1"/>
+          </svg>
+          Plantillas
+        </div>
+        <h2>Elegí tu estilo de CV</h2>
+        <p>Cada plantilla fue diseñada para destacar en distintos rubros. La IA adapta el contenido al estilo que elijas.</p>
+      </div>
+
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="todos">Todos</button>
+        <button class="filter-btn" data-filter="moderno">Moderno</button>
+        <button class="filter-btn" data-filter="clasico">Clásico</button>
+        <button class="filter-btn" data-filter="creativo">Creativo</button>
+        <button class="filter-btn" data-filter="ejecutivo">Ejecutivo</button>
+      </div>
+
+      <div class="templates-grid">
+
+        <!-- Moderno -->
+        <div class="tpl-card featured" data-style="moderno">
+          <div class="tpl-preview">
+            <span class="pop-badge">★ Más usado</span>
+            <div class="cv-mock">
+              <div class="m-top">
+                <div class="m-av"></div>
+                <div style="flex:1">
+                  <div class="m-bar" style="width:70%"></div>
+                  <div class="m-bar dk" style="width:50%"></div>
+                </div>
+              </div>
+              <div class="mb sl">EXPERIENCIA</div>
+              <div class="mb ac w100"></div>
+              <div class="mb dk w100"></div>
+              <div class="mb w85" style="margin-bottom:8px"></div>
+              <div class="mb sl">EDUCACIÓN</div>
+              <div class="mb dk w100"></div>
+              <div class="mb w65"></div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div><div class="tpl-name">Moderno</div><div class="tpl-desc">Tecnología y startups</div></div>
+            <button class="btn-use">Usar esta plantilla</button>
+          </div>
+        </div>
+
+        <!-- Clásico -->
+        <div class="tpl-card" data-style="clasico">
+          <div class="tpl-preview">
+            <div class="cv-mock">
+              <div style="text-align:center;padding-bottom:8px;margin-bottom:8px;border-bottom:1.5px solid #C8C7C3">
+                <div class="mb dk" style="width:60%;margin:0 auto 4px"></div>
+                <div class="mb" style="width:40%;margin:0 auto"></div>
+              </div>
+              <div class="mb sl">EXPERIENCIA</div>
+              <div class="mb dk w100"></div>
+              <div class="mb w85" style="margin-bottom:8px"></div>
+              <div class="mb sl">EDUCACIÓN</div>
+              <div class="mb dk w75"></div>
+              <div class="mb w55"></div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div><div class="tpl-name">Clásico / formal</div><div class="tpl-desc">Finanzas y derecho</div></div>
+            <button class="btn-use">Usar esta plantilla</button>
+          </div>
+        </div>
+
+        <!-- Creativo -->
+        <div class="tpl-card" data-style="creativo">
+          <div class="tpl-preview">
+            <div class="cv-mock" style="display:flex;gap:8px;padding:12px">
+              <div style="width:34px;background:#E6F1FB;border-radius:4px;padding:7px 5px;display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+                <div style="width:20px;height:20px;border-radius:50%;background:#185FA5"></div>
+                <div class="mb ac" style="width:100%"></div>
+                <div class="mb ac" style="width:70%"></div>
+                <div class="mb ac" style="width:100%"></div>
+              </div>
+              <div style="flex:1">
+                <div class="mb dk w85"></div>
+                <div class="mb sl">EXPERIENCIA</div>
+                <div class="mb dk w100"></div>
+                <div class="mb w75" style="margin-bottom:6px"></div>
+                <div class="mb sl">HABILIDADES</div>
+                <div class="mb ac w100"></div>
+                <div class="mb w65"></div>
+              </div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div><div class="tpl-name">Creativo</div><div class="tpl-desc">Diseño y marketing</div></div>
+            <button class="btn-use">Usar esta plantilla</button>
+          </div>
+        </div>
+
+        <!-- Ejecutivo -->
+        <div class="tpl-card" data-style="ejecutivo">
+          <div class="tpl-preview">
+            <div class="cv-mock">
+              <div class="e-top">
+                <div>
+                  <div class="mb dk" style="width:95px;margin-bottom:3px"></div>
+                  <div class="mb" style="width:65px;margin-bottom:0"></div>
+                </div>
+                <div>
+                  <div class="mb" style="width:50px;margin-bottom:3px"></div>
+                  <div class="mb" style="width:40px;margin-bottom:0"></div>
+                </div>
+              </div>
+              <div class="e-cols">
+                <div class="e-main">
+                  <div class="e-ac"></div>
+                  <div class="mb dk w100"></div>
+                  <div class="mb w85" style="margin-bottom:7px"></div>
+                  <div class="e-ac"></div>
+                  <div class="mb dk w100"></div>
+                  <div class="mb w75"></div>
+                </div>
+                <div class="e-aside">
+                  <div class="e-ac" style="width:80%"></div>
+                  <div class="mb w100"></div>
+                  <div class="mb w65" style="margin-bottom:7px"></div>
+                  <div class="e-ac" style="width:80%"></div>
+                  <div class="mb w100"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div><div class="tpl-name">Ejecutivo</div><div class="tpl-desc">Gerencia y liderazgo</div></div>
+            <button class="btn-use">Usar esta plantilla</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PRECIOS ===================== -->
+  <section class="pricing-section" id="precios">
+    <div class="container">
+      <div class="pricing-header">
+        <div class="section-tag">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4">
+            <rect x="1" y="3" width="10" height="8" rx="1.5"/>
+            <path d="M4 3V2a2 2 0 014 0v1"/>
+          </svg>
+          Precios
+        </div>
+        <h2>Elegí tu plan</h2>
+        <p>Sin sorpresas. Cancelás cuando querés.</p>
+      </div>
+
+      <div class="billing-toggle">
+        <span class="billing-lbl active" id="lbl-m" onclick="setBilling('monthly')">Mensual</span>
+        <div class="tgl-track" id="tgl" onclick="toggleBilling()">
+          <div class="tgl-thumb"></div>
+        </div>
+        <span class="billing-lbl" id="lbl-a" onclick="setBilling('annual')">Anual</span>
+        <span class="save-pill hide" id="save-pill">Ahorrás hasta 15%</span>
+      </div>
+
+      <div class="plans-grid">
+
+        <!-- Básico -->
+        <div class="plan-card">
+          <div class="plan-name">Básico</div>
+          <div class="plan-tagline">Para empezar a armar tu CV sin compromiso.</div>
+          <div class="price-row">
+            <span class="price-cur">$</span>
+            <span class="price-amt" data-m="1.99" data-a="1.99">1.99</span>
+            <span class="price-per">/mes</span>
+          </div>
+          <div class="price-note" id="pn-basico">&nbsp;</div>
+          <div class="plan-div"></div>
+          <ul class="feat-list">
+            <li class="feat-item"><div class="feat-ico on"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#185FA5" stroke-width="1.5"><path d="M1.5 4l2 2 3-3"/></svg></div>1 CV activo</li>
+            <li class="feat-item"><div class="feat-ico on"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#185FA5" stroke-width="1.5"><path d="M1.5 4l2 2 3-3"/></svg></div>3 plantillas disponibles</li>
+            <li class="feat-item"><div class="feat-ico on"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#185FA5" stroke-width="1.5"><path d="M1.5 4l2 2 3-3"/></svg></div>Descarga en PDF</li>
+            <li class="feat-item off"><div class="feat-ico off"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#888780" stroke-width="1.5"><path d="M2 2l4 4M6 2L2 6"/></svg></div>Personalización avanzada</li>
+            <li class="feat-item off"><div class="feat-ico off"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#888780" stroke-width="1.5"><path d="M2 2l4 4M6 2L2 6"/></svg></div>Soporte prioritario</li>
+          </ul>
+          <button class="plan-btn outline" onclick="payPlan('basico')">Empezar gratis</button>
+        </div>
+
+        <!-- Pro -->
+        <div class="plan-card featured">
+          <div class="pop-label">Más popular</div>
+          <div class="plan-name">Pro</div>
+          <div class="plan-tagline">Para quienes buscan trabajo activamente.</div>
+          <div class="price-row">
+            <span class="price-cur">$</span>
+            <span class="price-amt" data-m="6.99" data-a="5.99">6.99</span>
+            <span class="price-per">/mes</span>
+          </div>
+          <div class="price-note" id="pn-pro">&nbsp;</div>
+          <div class="plan-div"></div>
+          <ul class="feat-list">
+            <li class="feat-item"><div class="feat-ico on"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#185FA5" stroke-width="1.5"><path d="M1.5 4l2 2 3-3"/></svg></div>CVs ilimitados</li>
+            <li class="feat-item"><div class="feat-ico on"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#185FA5" stroke-width="1.5"><path d="M1.5 4l2 2 3-3"/></svg></div>Todas las plantillas</li>
+            <li class="feat-item"><div class="feat-ico on"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#185FA5" stroke-width="1.5"><path d="M1.5 4l2 2 3-3"/></svg></div>Descarga PDF y Word</li>
+            <li class="feat-item"><div class="feat-ico on"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#185FA5" stroke-width="1.5"><path d="M1.5 4l2 2 3-3"/></svg></div>Personalización avanzada</li>
+            <li class="feat-item off"><div class="feat-ico off"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#888780" stroke-width="1.5"><path d="M2 2l4 4M6 2L2 6"/></svg></div>Soporte prioritario</li>
+          </ul>
+          <button class="plan-btn filled" onclick="payPlan('pro')">Empezar con Pro</button>
+        </div>
+
+        <!-- Empresas -->
+        <div class="plan-card">
+          <div class="plan-name">Empresas</div>
+          <div class="plan-tagline">Para equipos de RR.HH. y consultoras.</div>
+          <div class="price-row">
+            <span class="price-cur">$</span>
+            <span class="price-amt" data-m="11.99" data-a="9.99">11.99</span>
+            <span class="price-per">/mes</span>
+          </div>
+          <div class="price-note" id="pn-empresas">&nbsp;</div>
+          <div class="plan-div"></div>
+          <ul class="feat-list">
+            <li class="feat-item"><div class="feat-ico on"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#185FA5" stroke-width="1.5"><path d="M1.5 4l2 2 3-3"/></svg></div>Todo lo del plan Pro</li>
+            <li class="feat-item"><div class="feat-ico on"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#185FA5" stroke-width="1.5"><path d="M1.5 4l2 2 3-3"/></svg></div>Gestión de equipo</li>
+            <li class="feat-item"><div class="feat-ico on"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#185FA5" stroke-width="1.5"><path d="M1.5 4l2 2 3-3"/></svg></div>Panel de administración</li>
+            <li class="feat-item"><div class="feat-ico on"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#185FA5" stroke-width="1.5"><path d="M1.5 4l2 2 3-3"/></svg></div>Personalización avanzada</li>
+            <li class="feat-item"><div class="feat-ico on"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#185FA5" stroke-width="1.5"><path d="M1.5 4l2 2 3-3"/></svg></div>Soporte prioritario</li>
+          </ul>
+          <button class="plan-btn dark" onclick="payPlan('empresas')">Contactar ventas</button>
+        </div>
+
+      </div>
+      <p class="pricing-note">Sin tarjeta de crédito requerida · Cancelá cuando quieras</p>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <div class="footer-logo-icon">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#E6F1FB" stroke-width="1.5">
+              <rect x="1" y="2" width="14" height="12" rx="2.5"/>
+              <path d="M4 7h8M4 10h5"/>
+            </svg>
+          </div>
+          <span class="footer-logo-name">Build<span>My</span>CV</span>
+        </div>
+        <div class="footer-links">
+          <a href="#">Privacidad</a>
+          <a href="#">Términos</a>
+          <a href="#">Contacto</a>
+          <a href="#">Blog</a>
+        </div>
+        <span class="footer-copy">© 2025 BuildMyCV</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== JS ===================== -->
+  <script>
+
+    /* =========================================================
+       SECCIÓN 1 — CONFIGURACIÓN DE PAGOS
+       =========================================================
+       Completá los datos de cada procesador antes de publicar.
+       Podés usar Stripe, MercadoPago, o ambos a la vez.
+       El botón activo se controla con PAYMENT_PROVIDER abajo.
+    ========================================================= */
+
+    // ── ¿Qué procesador usar? ──────────────────────
+    // Opciones: 'astropay' | 'mercadopago' | 'ambos'
+    // Si elegís 'ambos', el usuario verá ambos botones de pago.
+    const PAYMENT_PROVIDER = 'mercadopago'; // ← CAMBIÁ ESTO
+
+    // ── Stripe ─────────────────────────────────────
+    // Cómo obtener tus links:
+    //   1. Creá una cuenta en https://stripe.com
+    //   2. Andá a dashboard.stripe.com → Payment Links → + New
+    //   3. Creá un producto por plan (Básico, Pro, Empresas)
+    //   4. Copiá cada URL generada y pegála abajo
+    const ASTROPAY_LINKS = {
+      basico:   'https://buy.stripe.com/REEMPLAZAR_LINK_BASICO',   // ← pegá tu link acá
+      pro:      'https://buy.stripe.com/REEMPLAZAR_LINK_PRO',      // ← pegá tu link acá
+      empresas: 'https://buy.stripe.com/REEMPLAZAR_LINK_EMPRESAS', // ← pegá tu link acá
+    };
+
+    // ── MercadoPago ────────────────────────────────
+    // Cómo obtener tus links:
+    //   1. Creá una cuenta en https://www.mercadopago.com.ar
+    //   2. Andá a tu panel → Cobrar → Link de pago → Crear link
+    //   3. Configurá precio, nombre y descripción de cada plan
+    //   4. Copiá cada URL y pegála abajo
+    // Documentación: https://www.mercadopago.com.ar/developers/es/docs
+    const MP_LINKS = {
+      basico:   'https://mpago.la/1fKnEVy',   
+      pro:      'https://mpago.la/2vLd199',      
+      empresas: 'https://mpago.la/2EB5PYv', 
+    };
+
+    /* =========================================================
+       SECCIÓN 2 — CONFIGURACIÓN DE LA API DE IA
+       =========================================================
+       El generador de CV necesita un backend propio.
+       NUNCA pongas tu API key directamente en este archivo HTML
+       porque es público y cualquiera puede verla.
+
+       Flujo recomendado:
+         Frontend (este HTML)
+           → POST /api/generate-cv  (tu servidor)
+             → llama a la API de IA con tu key secreta
+               → devuelve el CV generado al frontend
+
+       Si usás Node.js/Express, el endpoint sería así:
+       ─────────────────────────────────────────────
+       // server.js
+       app.post('/api/generate-cv', async (req, res) => {
+         const { name, role, industry, experience, education, skills, template } = req.body;
+
+         // OPCIÓN A — Anthropic (Claude)
+         // Documentación: https://docs.anthropic.com
+         // Instalación: npm install @anthropic-ai/sdk
+         // API Key: https://console.anthropic.com → API Keys
+         const Anthropic = require('@anthropic-ai/sdk');
+         const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY }); // ← .env
+         const message = await client.messages.create({
+           model: 'claude-opus-4-6',
+           max_tokens: 2000,
+           messages: [{ role: 'user', content: `Generá un CV profesional para ${name}...` }]
+         });
+         res.json({ cv: message.content[0].text });
+
+         // OPCIÓN B — OpenAI
+         // Documentación: https://platform.openai.com/docs
+         // Instalación: npm install openai
+         // API Key: https://platform.openai.com/api-keys
+         // const OpenAI = require('openai');
+         // const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY }); // ← .env
+         // const response = await openai.chat.completions.create({ ... });
+         // res.json({ cv: response.choices[0].message.content });
+       });
+       ─────────────────────────────────────────────
+       Variables de entorno (.env):
+         ANTHROPIC_API_KEY=sk-ant-xxxxx   ← obtenés en console.anthropic.com
+         OPENAI_API_KEY=sk-xxxxx          ← obtenés en platform.openai.com
+         STRIPE_SECRET_KEY=sk_live_xxxxx  ← obtenés en dashboard.stripe.com
+         MP_ACCESS_TOKEN=APP_USR-xxxxx    ← obtenés en mercadopago.com/developers
+    ========================================================= */
+
+    // URL de tu backend (cambiar en producción)
+    // Ejemplo local:      'http://localhost:3000'
+    // Ejemplo producción: 'https://api.buildmycv.com'
+    const API_BASE_URL = 'http://localhost:3000'; // ← CAMBIÁ ESTO en producción
+
+
+    /* =========================================================
+       SECCIÓN 3 — CÓDIGO DE LA INTERFAZ (no necesitás tocar esto)
+    ========================================================= */
+
+    // ── Navbar mobile ──────────────────────────────
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+      document.getElementById('hamburger').classList.toggle('open');
+    }
+
+    // ── Modals ─────────────────────────────────────
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function closeOnOverlay(e, id) {
+      if (e.target.id === id) closeModal(id);
+    }
+    function switchModal(from, to) {
+      closeModal(from);
+      setTimeout(() => openModal(to), 120);
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        ['loginOverlay','registerOverlay','generatorOverlay'].forEach(closeModal);
+        document.body.style.overflow = '';
+      }
+    });
+
+    // ── Login ──────────────────────────────────────
+    function submitLogin() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass  = document.getElementById('loginPass').value;
+      const err   = document.getElementById('loginError');
+      if (!email || !pass) {
+        err.textContent = 'Completá email y contraseña.';
+        err.classList.add('show');
+        return;
+      }
+      err.classList.remove('show');
+
+      // ↓ CONECTAR AL BACKEND: reemplazá alert() por fetch real
+      // fetch(API_BASE_URL + '/api/auth/login', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ email, password: pass })
+      // })
+      // .then(r => r.json())
+      // .then(data => {
+      //   if (data.token) {
+      //     localStorage.setItem('token', data.token); // guardar sesión
+      //     closeModal('loginOverlay');
+      //   } else {
+      //     err.textContent = 'Email o contraseña incorrectos.';
+      //     err.classList.add('show');
+      //   }
+      // });
+      alert('✓ Login listo para conectar.\nBackend esperado en: ' + API_BASE_URL + '/api/auth/login');
+    }
+
+    // ── Registro ───────────────────────────────────
+    function submitRegister() {
+      const name  = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const pass  = document.getElementById('regPass').value;
+      const err   = document.getElementById('registerError');
+      if (!name || !email || pass.length < 8) {
+        err.textContent = !name || !email ? 'Completá todos los campos.' : 'La contraseña debe tener al menos 8 caracteres.';
+        err.classList.add('show');
+        return;
+      }
+      err.classList.remove('show');
+
+      // ↓ CONECTAR AL BACKEND: reemplazá alert() por fetch real
+      // fetch(API_BASE_URL + '/api/auth/register', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ name, email, password: pass })
+      // })
+      // .then(r => r.json())
+      // .then(data => {
+      //   if (data.token) {
+      //     localStorage.setItem('token', data.token);
+      //     closeModal('registerOverlay');
+      //     openModal('generatorOverlay'); // llevar al generador directo
+      //   }
+      // });
+      alert('✓ Registro listo para conectar.\nBackend esperado en: ' + API_BASE_URL + '/api/auth/register');
+    }
+
+    // ── Wizard generador de CV ─────────────────────
+    const TOTAL_STEPS = 6;
+    let currentStep   = 1;
+    const cvData      = {};
+
+    // IDs de los pasos en orden
+    const STEP_IDS = ['genStep1','genStep2','genStep3','genStep4','genStep5','genStep6','genStepLoading'];
+
+    function showStep(stepNumber) {
+      // Ocultar todos los pasos
+      STEP_IDS.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('active');
+      });
+
+      // Mostrar el paso correcto
+      let targetId;
+      if (stepNumber === 'loading') {
+        targetId = 'genStepLoading';
+      } else {
+        targetId = 'genStep' + stepNumber;
+        currentStep = stepNumber;
+      }
+
+      const target = document.getElementById(targetId);
+      if (target) target.classList.add('active');
+
+      // Actualizar barra de progreso
+      const progressStep = stepNumber === 'loading' ? TOTAL_STEPS : stepNumber;
+      const pct = Math.round((progressStep / TOTAL_STEPS) * 100);
+      document.getElementById('genProgress').style.width = pct + '%';
+
+      // Scroll al inicio del modal cuando cambia el paso
+      const modal = document.querySelector('.generator-modal');
+      if (modal) modal.scrollTop = 0;
+    }
+
+    function genNext(step) {
+      // Validaciones por paso
+      if (step === 1) {
+        cvData.name = document.getElementById('cvName').value.trim();
+        cvData.role = document.getElementById('cvRole').value.trim();
+        if (!cvData.name) { showFieldError('cvName', 'Ingresá tu nombre.'); return; }
+        if (!cvData.role) { showFieldError('cvRole', 'Ingresá el puesto deseado.'); return; }
+      }
+      if (step === 2) {
+        if (!cvData.industry) { alert('Elegí una industria para continuar.'); return; }
+      }
+      if (step === 3) {
+        cvData.experience = document.getElementById('cvExperience').value.trim();
+        if (!cvData.experience) { showFieldError('cvExperience', 'Describí algo de tu experiencia.'); return; }
+      }
+      if (step === 4) {
+        cvData.education = document.getElementById('cvEducation').value.trim();
+        cvData.skills    = document.getElementById('cvSkills').value.trim();
+        if (!cvData.education) { showFieldError('cvEducation', 'Ingresá tu educación.'); return; }
+        if (!cvData.skills)    { showFieldError('cvSkills', 'Ingresá al menos una habilidad.'); return; }
+      }
+      if (step === 5) {
+        if (!cvData.template) { alert('Elegí una plantilla para continuar.'); return; }
+        buildSummary();
+      }
+      showStep(step + 1);
+    }
+
+    function genBack(step) {
+      if (step > 1) showStep(step - 1);
+    }
+
+    function showFieldError(fieldId, msg) {
+      const field = document.getElementById(fieldId);
+      if (!field) return;
+      field.style.borderColor = '#E24B4A';
+      field.focus();
+      // Quitar error al escribir
+      field.addEventListener('input', () => { field.style.borderColor = ''; }, { once: true });
+      alert(msg);
+    }
+
+    function selectOption(el, key, value) {
+      el.closest('.gen-options').querySelectorAll('.gen-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      cvData[key] = value;
+    }
+
+    const INDUSTRY_LABELS = {
+      tecnologia: 'Tecnología',
+      diseno:     'Diseño y creatividad',
+      finanzas:   'Finanzas y negocios',
+      otro:       'Otra industria'
+    };
+    const TEMPLATE_LABELS = {
+      moderno:   'Moderno',
+      clasico:   'Clásico / formal',
+      creativo:  'Creativo',
+      ejecutivo: 'Ejecutivo'
+    };
+
+    function buildSummary() {
+      const rows = [
+        ['Nombre',      cvData.name],
+        ['Puesto',      cvData.role],
+        ['Industria',   INDUSTRY_LABELS[cvData.industry] || '—'],
+        ['Plantilla',   TEMPLATE_LABELS[cvData.template] || '—'],
+        ['Educación',   cvData.education],
+        ['Habilidades', cvData.skills],
+      ];
+      document.getElementById('genSummary').innerHTML = rows.map(([k, v]) => `
+        <div class="gen-summary-row">
+          <span class="gen-summary-key">${k}</span>
+          <span class="gen-summary-val">${v || '—'}</span>
+        </div>`).join('');
+    }
+
+    const LOADING_MSGS = [
+      'Analizando tu experiencia…',
+      'Redactando el resumen profesional…',
+      'Armando la sección de habilidades…',
+      'Aplicando la plantilla elegida…',
+      'Revisando el formato final…',
+      'Casi listo…'
+    ];
+
+    function startGeneration() {
+      // Mostrar pantalla de carga
+      showStep('loading');
+
+      let msgIndex = 0;
+      const msgEl = document.getElementById('genLoadingMsg');
+      if (msgEl) msgEl.textContent = LOADING_MSGS[0];
+
+      const interval = setInterval(() => {
+        msgIndex++;
+        if (msgEl) msgEl.textContent = LOADING_MSGS[msgIndex % LOADING_MSGS.length];
+      }, 900);
+
+      // ↓ OPCIÓN A — Llamada real al backend de IA
+      // Descomentá esto cuando tengas el backend listo:
+      //
+      fetch(API_BASE_URL + '/api/generate-cv', {
+         method: 'POST',
+         headers: {
+           'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + (localStorage.getItem('token') || '')
+         },
+         body: JSON.stringify(cvData)
+       })
+       .then(r => r.json())
+       .then(data => {
+         clearInterval(interval);
+         // data.cvText contiene el CV generado por la IA
+         // data.needsPayment indica si hay que cobrar antes de mostrar
+         if (data.needsPayment) {
+           redirectToPayment(cvData.template === 'empresas' ? 'empresas' : 'pro');
+         } else {
+           showCVResult(data.cvText);
+         }
+       })
+       .catch(err => {
+         clearInterval(interval);
+         alert('Error al generar el CV. Intentá de nuevo.');
+         showStep(6);
+       });
+
+      // ↓ OPCIÓN B — Simulación (usada mientras no hay backend)
+      // Eliminá este bloque cuando conectes el backend real
+      setTimeout(() => {
+        clearInterval(interval);
+        redirectToPayment(cvData.template === 'empresas' ? 'empresas' : 'pro');
+      }, 3500);
+    }
+
+    // ── Pagos — redirige según el procesador configurado ──
+    function redirectToPayment(plan) {
+      if (PAYMENT_PROVIDER === 'stripe') {
+        redirectToStripe(plan);
+      } else if (PAYMENT_PROVIDER === 'mercadopago') {
+        redirectToMercadoPago(plan);
+      } else {
+        // 'ambos' — mostrar pantalla de elección
+        showStep('loading'); // volver a loading mientras mostramos opciones
+        showPaymentChoice(plan);
+      }
+    }
+
+    function showPaymentChoice(plan) {
+      // Reemplazar contenido del paso loading con selector de pago
+      const loadingStep = document.getElementById('genStepLoading');
+      if (!loadingStep) return;
+      loadingStep.innerHTML = `
+        <div style="text-align:center;padding:8px 0 16px">
+          <div style="width:44px;height:44px;border-radius:12px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="var(--accent)" stroke-width="1.5"><rect x="2" y="6" width="18" height="13" rx="2"/><path d="M2 10h18M6 15h3"/></svg>
+          </div>
+          <h3 style="font-size:18px;font-weight:500;margin-bottom:6px;letter-spacing:-0.01em">Elegí cómo pagar</h3>
+          <p style="font-size:13px;color:var(--text-secondary);margin-bottom:24px">Ambos métodos son seguros. Elegí el que prefieras.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button onclick="redirectToStripe('${plan}')" style="width:100%;font-family:var(--font-sans);font-size:14px;font-weight:500;padding:13px 18px;border-radius:var(--radius-md);background:#635BFF;color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:opacity .18s ease" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+            <svg width="44" height="18" viewBox="0 0 60 25" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M8.5 9.2c0-.7.6-1 1.5-1 1.4 0 3 .4 4.4 1.2V5.7C13 5.1 11.5 4.8 10 4.8 6.4 4.8 4 6.7 4 9.4c0 4.1 5.7 3.5 5.7 5.2 0 .8-.7 1.1-1.7 1.1-1.5 0-3.4-.6-4.9-1.5v3.7c1.7.7 3.3 1 4.9 1 3.7 0 6.2-1.8 6.2-4.6-.1-4.4-5.7-3.7-5.7-5.1zM26 4.8l-2.3 11-2.4-11h-4.5l3.7 15.3h6.4l3.7-15.3H26zM35.4 8.8c0-1 .8-1.5 2.2-1.5 2 0 4.5.6 6.5 1.7V5.3c-2.2-.9-4.3-1.2-6.5-1.2-4.4 0-7.3 2.3-7.3 6 0 5.8 8 4.9 8 7.3 0 1.2-1 1.7-2.5 1.7-2.2 0-5-.9-7.2-2.1v3.8c2.4 1 4.9 1.5 7.2 1.5 4.5 0 7.5-2.2 7.5-6-.1-6.3-8-5.3-8-7.5zM56 9.5h-3V5.2h-4.5v4.3h-2v3.5h2v7.2c0 2.9 1.8 4 4.5 4 1.1 0 2.3-.2 3.3-.6v-3.4c-.7.3-1.3.4-2 .4-.9 0-1.3-.4-1.3-1.4v-6.2H56V9.5z"/></svg>
+            Pagar con Stripe
+          </button>
+          <button onclick="redirectToMercadoPago('${plan}')" style="width:100%;font-family:var(--font-sans);font-size:14px;font-weight:500;padding:13px 18px;border-radius:var(--radius-md);background:#009EE3;color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:opacity .18s ease" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+            Pagar con MercadoPago
+          </button>
+          <button onclick="showStep(6)" style="width:100%;font-family:var(--font-sans);font-size:13px;padding:9px;border-radius:var(--radius-md);background:transparent;color:var(--text-tertiary);border:1px solid var(--border);cursor:pointer">
+            Volver al resumen
+          </button>
+        </div>`;
+    }
+
+    // ── Stripe ─────────────────────────────────────
+    function redirectToStripe(plan) {
+      const url = STRIPE_LINKS[plan];
+      if (!url || url.includes('REEMPLAZAR')) {
+        alert(
+          '⚠️ Stripe no está configurado todavía.\n\n' +
+          'Pasos para activarlo:\n' +
+          '1. Creá cuenta en stripe.com\n' +
+          '2. dashboard.stripe.com → Payment Links → + New\n' +
+          '3. Creá un link por plan (Básico, Pro, Empresas)\n' +
+          '4. Pegá las URLs en STRIPE_LINKS al inicio del JS'
+        );
+        return;
+      }
+      window.location.href = url;
+    }
+
+    // ── MercadoPago ────────────────────────────────
+    function redirectToMercadoPago(plan) {
+      const url = MP_LINKS[plan];
+      if (!url || url.includes('REEMPLAZAR')) {
+        alert(
+          '⚠️ MercadoPago no está configurado todavía.\n\n' +
+          'Pasos para activarlo:\n' +
+          '1. Creá cuenta en mercadopago.com.ar\n' +
+          '2. Panel → Cobrar → Link de pago → Crear link\n' +
+          '3. Creá un link por plan (Básico, Pro, Empresas)\n' +
+          '4. Pegá las URLs en MP_LINKS al inicio del JS\n\n' +
+          'Docs: mercadopago.com.ar/developers/es/docs'
+        );
+        return;
+      }
+      window.location.href = url;
+    }
+
+    // ── Botones de plan en sección Precios ─────────
+    // Cada botón llama a redirectToPayment() con el plan correspondiente.
+    // El flujo se adapta automáticamente según PAYMENT_PROVIDER arriba.
+    function payPlan(plan) {
+      redirectToPayment(plan);
+    }
+
+    // ── Filtros plantillas ─────────────────────────
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        document.querySelectorAll('.tpl-card').forEach(card => {
+          card.classList.toggle('hidden', f !== 'todos' && card.dataset.style !== f);
+        });
+      });
+    });
+
+    document.querySelectorAll('.tpl-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.tpl-card').forEach(c => c.classList.remove('featured'));
+        card.classList.add('featured');
+      });
+    });
+
+    // ── Botón "Usar esta plantilla" → abre generador ──
+    document.querySelectorAll('.btn-use').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const style = btn.closest('.tpl-card').dataset.style;
+        cvData.template = style;
+        openModal('generatorOverlay');
+        showStep(1);
+        // Pre-seleccionar la plantilla en el paso 5
+        setTimeout(() => {
+          document.querySelectorAll('#genStep5 .gen-option').forEach(o => {
+            o.classList.toggle('selected', o.dataset.value === style);
+          });
+        }, 50);
+      });
+    });
+
+    // ── Toggle precios ─────────────────────────────
+    let isAnnual = false;
+    const annualNotes = {
+      'pn-basico':   '',
+      'pn-pro':      'Facturado anualmente — ahorrás $12/año',
+      'pn-empresas': 'Facturado anualmente — ahorrás $24/año'
+    };
+
+    function toggleBilling() { isAnnual = !isAnnual; applyBilling(); }
+    function setBilling(mode) { isAnnual = mode === 'annual'; applyBilling(); }
+
+    function applyBilling() {
+      document.getElementById('tgl').classList.toggle('on', isAnnual);
+      document.getElementById('lbl-m').classList.toggle('active', !isAnnual);
+      document.getElementById('lbl-a').classList.toggle('active', isAnnual);
+      document.getElementById('save-pill').classList.toggle('hide', !isAnnual);
+      document.querySelectorAll('.price-amt').forEach(el => {
+        el.textContent = isAnnual ? el.dataset.a : el.dataset.m;
+      });
+      Object.entries(annualNotes).forEach(([id, note]) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = (isAnnual && note) ? note : '\u00a0';
+      });
+    }
+
+    // ── Navbar activo al scroll ────────────────────
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { threshold: 0.4 });
+    sections.forEach(s => observer.observe(s));
+
+  </script>
+
+</body>
+</html>

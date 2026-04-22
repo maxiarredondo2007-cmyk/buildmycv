@@ -1839,7 +1839,7 @@
     // URL de tu backend (cambiar en producción)
     // Ejemplo local:      'http://localhost:3000'
     // Ejemplo producción: 'https://api.buildmycv.com'
-    const API_BASE_URL = 'https://backend-buildmycv.onrender.com';
+    const API_BASE_URL = 'http://localhost:3000'; // ← CAMBIÁ ESTO en producción
 
 
     /* =========================================================
@@ -2072,6 +2072,9 @@
         if (msgEl) msgEl.textContent = LOADING_MSGS[msgIndex % LOADING_MSGS.length];
       }, 900);
 
+      console.log('[BuildMyCV] Enviando request a:', API_BASE_URL + '/api/generate-cv');
+      console.log('[BuildMyCV] Datos enviados:', cvData);
+
       // Llamada al backend para generar el CV con IA
       fetch(API_BASE_URL + '/api/generate-cv', {
         method: 'POST',
@@ -2081,31 +2084,40 @@
         },
         body: JSON.stringify(cvData)
       })
-      .then(r => {
-        if (!r.ok) throw new Error('El servidor respondió con error ' + r.status);
-        return r.json();
+      .then(async r => {
+        console.log('[BuildMyCV] Respuesta recibida. Status:', r.status);
+        const text = await r.text();
+        console.log('[BuildMyCV] Respuesta cruda:', text);
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          throw new Error('Respuesta no es JSON válido. Contenido: ' + text.substring(0, 200));
+        }
+        if (!r.ok) {
+          throw new Error(data.error || ('Status ' + r.status));
+        }
+        return data;
       })
       .then(data => {
         clearInterval(interval);
         if (data.error) {
-          alert('Error: ' + data.error);
+          alert('Error del servidor: ' + data.error);
           showStep(6);
           return;
         }
-        // Guardar el CV generado y mostrarlo
+        console.log('[BuildMyCV] CV generado. Modelo usado:', data.modelUsed || '(no especificado)');
         cvData.generatedText = data.cvText;
         showCVResult(data.cvText);
       })
       .catch(err => {
         clearInterval(interval);
-        console.error('Error al generar CV:', err);
+        console.error('[BuildMyCV] Error al generar CV:', err);
         alert(
-          'No se pudo conectar con el backend.\n\n' +
-          'Revisá que:\n' +
-          '1. El servidor esté corriendo (node server.js)\n' +
-          '2. Estés en ' + API_BASE_URL + '/api/health y veas {"status":"ok"}\n' +
-          '3. La API key de Anthropic esté en el archivo .env\n\n' +
-          'Detalle técnico: ' + err.message
+          'No se pudo generar el CV.\n\n' +
+          'Mensaje: ' + err.message + '\n\n' +
+          'Abrí F12 → Consola para ver el detalle completo.\n' +
+          'También podés revisar los logs del servidor en Render.'
         );
         showStep(6);
       });
